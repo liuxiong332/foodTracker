@@ -53,10 +53,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
     }
     
     // MARK: Actions
-
-    @IBAction func setDefaultLabelText(sender: UIButton) {
-        mealNameLabel.text = "Default Text"
-    }
     
     @IBAction func selectImageFromPhotoLibrary(sender: UITapGestureRecognizer) {
         //HIde the keyboard
