@@ -42,4 +42,13 @@ class MealTableViewController: UITableViewController {
         
         return cell
     }
+    
+    @IBAction func unwindToMealList(sender: UIStoryboardSegue) {
+        if let sourceViewController = sender.sourceViewController as? MealViewController,
+        let meal = sourceViewController.meal {
+            meals += [meal]
+            let indexPath = NSIndexPath(forRow: meals.count - 1, inSection: 0)
+            tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Bottom)
+        }
+    }
 }
