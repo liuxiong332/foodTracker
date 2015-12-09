@@ -43,12 +43,27 @@ class MealTableViewController: UITableViewController {
         return cell
     }
     
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "ShowDetail" {
+            if let selectedCell = sender as? MealTableViewCell {
+                let indexPath = tableView.indexPathForCell(selectedCell)!
+                let detailViewController = segue.destinationViewController as! MealViewController
+                detailViewController.meal = meals[indexPath.row]
+            }
+        }
+    }
+    
     @IBAction func unwindToMealList(sender: UIStoryboardSegue) {
         if let sourceViewController = sender.sourceViewController as? MealViewController,
         let meal = sourceViewController.meal {
-            meals += [meal]
-            let indexPath = NSIndexPath(forRow: meals.count - 1, inSection: 0)
-            tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Bottom)
+            if let selectedIndexPath = tableView.indexPathForSelectedRow {
+                meals[selectedIndexPath.row] = meal
+                tableView.reloadRowsAtIndexPaths([selectedIndexPath], withRowAnimation: .Bottom)
+            } else {
+                meals += [meal]
+                let indexPath = NSIndexPath(forRow: meals.count - 1, inSection: 0)
+                tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Bottom)
+            }
         }
     }
 }
