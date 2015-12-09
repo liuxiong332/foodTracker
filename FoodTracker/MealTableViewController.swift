@@ -21,7 +21,13 @@ class MealTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadSampleMeals()
+        
+        if let saveMeals = loadMeals() {
+            meals = saveMeals
+        } else {
+            loadSampleMeals()
+        }
+        
         navigationItem.leftBarButtonItem = editButtonItem()
     }
     
@@ -52,6 +58,7 @@ class MealTableViewController: UITableViewController {
         if editingStyle == .Delete {
             meals.removeAtIndex(indexPath.row)
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+            saveMeals()
         }
     }
     
@@ -76,6 +83,19 @@ class MealTableViewController: UITableViewController {
                 let indexPath = NSIndexPath(forRow: meals.count - 1, inSection: 0)
                 tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Bottom)
             }
+            saveMeals()
         }
+    }
+    
+    // MARK: NSCoding
+    func saveMeals() {
+        let isSuccessfulSave = NSKeyedArchiver.archiveRootObject(meals, toFile: Meal.ArchiveURL.path!)
+        if !isSuccessfulSave {
+            print("Failed to save meals...")
+        }
+    }
+    
+    func loadMeals() -> [Meal]? {
+        return NSKeyedUnarchiver.unarchiveObjectWithFile(Meal.ArchiveURL.path!) as? [Meal]
     }
 }
