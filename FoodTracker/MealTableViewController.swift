@@ -22,6 +22,7 @@ class MealTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         loadSampleMeals()
+        navigationItem.leftBarButtonItem = editButtonItem()
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -41,6 +42,17 @@ class MealTableViewController: UITableViewController {
         cell.photoImageView.image = meal.photo
         
         return cell
+    }
+    
+    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return true
+    }
+    
+    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if editingStyle == .Delete {
+            meals.removeAtIndex(indexPath.row)
+            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+        }
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
